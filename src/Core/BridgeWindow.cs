@@ -70,8 +70,8 @@ namespace RevitMultiBridge
                         Icon = SD.Icon.FromHandle(bmp.GetHicon());
             }
             catch (Exception ex) { Log.Write("Window icon: " + ex.Message); }
-            ClientSize = new SD.Size(640, 560);
-            MinimumSize = new SD.Size(560, 480);
+            ClientSize = new SD.Size(660, 620);
+            MinimumSize = new SD.Size(580, 540);
             StartPosition = WF.FormStartPosition.CenterParent;
             Font = new SD.Font("Segoe UI", 9f);
             ShowInTaskbar = false;
@@ -82,23 +82,23 @@ namespace RevitMultiBridge
             lStatus = new WF.Label { AutoSize = true, Location = new SD.Point(12, 8), Font = new SD.Font("Segoe UI Semibold", 11f) };
             lUrl = new WF.Label { AutoSize = true, Location = new SD.Point(14, 34), ForeColor = muted };
             lJob = new WF.Label { AutoSize = true, Location = new SD.Point(14, 54) };
-            lMoved = new WF.Label { AutoSize = false, Location = new SD.Point(300, 54), Size = new SD.Size(328, 18), ForeColor = Ui.Amber.Back, Anchor = topWide,
+            lMoved = new WF.Label { AutoSize = false, Location = new SD.Point(300, 54), Size = new SD.Size(328, 18), ForeColor = Ui.Amber.Fore, Anchor = topWide,
                                     TextAlign = SD.ContentAlignment.TopRight, AutoEllipsis = true };
             var lPeers = new WF.Label { AutoSize = true, Location = new SD.Point(14, 82), Text = "Bridges on this PC (any Revit version, port pool " + Server.First + "–" + Server.Last + ")", ForeColor = muted };
-            peers = new WF.ListView { Location = new SD.Point(12, 102), Size = new SD.Size(616, 172), View = WF.View.Details, HeaderStyle = WF.ColumnHeaderStyle.Nonclickable,
+            peers = new WF.ListView { Location = new SD.Point(14, 104), Size = new SD.Size(632, 212), View = WF.View.Details, HeaderStyle = WF.ColumnHeaderStyle.Nonclickable,
                                       Anchor = topWide, MultiSelect = false };
             peers.Columns.Add("Port", 56); peers.Columns.Add("Revit", 56); peers.Columns.Add("Document", 220); peers.Columns.Add("Status", 96); peers.Columns.Add("PID", 64); peers.Columns.Add("View", 124);
-            var lRecent = new WF.Label { AutoSize = true, Location = new SD.Point(14, 286), Text = "Recent calls to this Revit", ForeColor = muted };
-            list = new WF.ListView { Location = new SD.Point(12, 306), Size = new SD.Size(616, 202), View = WF.View.Details, HeaderStyle = WF.ColumnHeaderStyle.Nonclickable, Anchor = all };
+            var lRecent = new WF.Label { AutoSize = true, Location = new SD.Point(14, 330), Text = "Recent calls to this Revit", ForeColor = muted };
+            list = new WF.ListView { Location = new SD.Point(14, 352), Size = new SD.Size(632, 206), View = WF.View.Details, HeaderStyle = WF.ColumnHeaderStyle.Nonclickable, Anchor = all };
             list.Columns.Add("Time", 64); list.Columns.Add("Call", 104); list.Columns.Add("Result", 104); list.Columns.Add("Duration", 70); list.Columns.Add("Script", 270);
 
             // bottom row: secondary buttons on the left; port picker + Re-claim + the main one (Start / Stop) on the right
             var bl = WF.AnchorStyles.Bottom | WF.AnchorStyles.Left; var br = WF.AnchorStyles.Bottom | WF.AnchorStyles.Right;
-            bLog = new WF.Button { Text = "Open log", Size = new SD.Size(90, 28), Location = new SD.Point(12, 520), Anchor = bl };
-            bCancel = new WF.Button { Text = "Cancel script", Size = new SD.Size(110, 28), Location = new SD.Point(110, 520), Anchor = bl };
-            cbPort = new WF.ComboBox { DropDownStyle = WF.ComboBoxStyle.DropDownList, Size = new SD.Size(96, 24), Location = new SD.Point(338, 523), Anchor = br };
-            bReclaim = new WF.Button { Text = "Re-claim", Size = new SD.Size(96, 28), Location = new SD.Point(440, 520), Anchor = br };
-            bToggle = new WF.Button { Text = "Stop", Size = new SD.Size(86, 28), Location = new SD.Point(542, 520), Anchor = br };
+            bLog = new WF.Button { Text = "Open log", Size = new SD.Size(90, 28), Location = new SD.Point(12, 574), Anchor = bl };
+            bCancel = new WF.Button { Text = "Cancel script", Size = new SD.Size(110, 28), Location = new SD.Point(110, 574), Anchor = bl };
+            cbPort = new WF.ComboBox { DropDownStyle = WF.ComboBoxStyle.DropDownList, Size = new SD.Size(96, 24), Location = new SD.Point(352, 579), Anchor = br };
+            bReclaim = new WF.Button { Text = "Re-claim", Size = new SD.Size(96, 28), Location = new SD.Point(456, 574), Anchor = br };
+            bToggle = new WF.Button { Text = "Stop", Size = new SD.Size(86, 28), Location = new SD.Point(560, 574), Anchor = br };
             cbPort.Items.Add("Any free port");
             for (int p = Server.First; p <= Server.Last; p++) cbPort.Items.Add(p.ToString());
             cbPort.SelectedIndex = 0;
@@ -164,7 +164,7 @@ namespace RevitMultiBridge
         {
             bool on = Server.Running;
             lStatus.Text = on ? "● RUNNING on port " + Server.Port : "● STOPPED";
-            lStatus.ForeColor = on ? Ui.Green.Back : Ui.DangerColor;
+            lStatus.ForeColor = on ? Ui.Green.Fore : Ui.DangerColor;
             lUrl.Text = on ? "http://localhost:" + Server.Port + "/mcp   ·   " + HostInfo.Label : (Server.LastError ?? "Not listening: Claude cannot reach this Revit.");
             bToggle.Text = on ? "Stop" : "Start";
             if (styled && wasOn != on) { Ui.SetPrimaryKind(bToggle, on); wasOn = on; }
@@ -190,6 +190,7 @@ namespace RevitMultiBridge
                     peers.Items.Add(it);
                     if (sel == it.Text) it.Selected = true;
                 }
+                Ui.Refit(peers);   // before EndUpdate: the scrollbars are worked out once, with the final widths
                 peers.EndUpdate();
                 Ui.EmptyText(peers, "No Revit bridge found on ports " + Server.First + "–" + Server.Last + ".");
             }
@@ -199,6 +200,7 @@ namespace RevitMultiBridge
                 list.BeginUpdate();
                 list.Items.Clear();
                 foreach (var r in Server.RecentCalls().Reverse()) list.Items.Add(new WF.ListViewItem(r));
+                Ui.Refit(list);
                 list.EndUpdate();
                 Ui.EmptyText(list, "No calls yet.");
             }

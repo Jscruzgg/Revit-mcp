@@ -33,26 +33,27 @@ namespace RevitMultiBridge
     static class Ui
     {
         // colours of the Cladding BIM design system (6 Nov 2026, user): primary #0F4C53, cold neutrals, no beige, one typeface (Segoe UI)
-        public static readonly SD.Color Page = SD.Color.FromArgb(247, 248, 250);   // surface-window
+        public static readonly SD.Color Page = SD.Color.FromArgb(0xFF, 0xFF, 0xFF);   // Homie surface-page
         public static readonly SD.Color Surface = SD.Color.White;
-        public static readonly SD.Color Text = SD.Color.FromArgb(42, 46, 48);   // ink
-        public static readonly SD.Color Text2 = SD.Color.FromArgb(95, 107, 115);   // ink-muted
-        public static readonly SD.Color Border = SD.Color.FromArgb(221, 226, 230);   // border
-        public static readonly SD.Color BorderStrong = SD.Color.FromArgb(200, 207, 213);   // border, control outline
-        public static readonly SD.Color Hover = SD.Color.FromArgb(238, 241, 244);   // surface-field
-        public static readonly SD.Color Selected = SD.Color.FromArgb(217, 232, 231);   // primary-tint
-        public static readonly SD.Color Brand = SD.Color.FromArgb(15, 76, 83);   // primary
-        public static readonly SD.Color BrandHover = SD.Color.FromArgb(11, 58, 64);   // primary, hover
-        public static readonly SD.Color BrandPress = SD.Color.FromArgb(8, 45, 50);   // primary, pressed
-        public static readonly SD.Color BrandSoft = SD.Color.FromArgb(217, 232, 231);   // primary-tint
-        public static readonly SD.Color Disabled = SD.Color.FromArgb(238, 241, 244);   // surface-field
-        public static readonly SD.Color DisabledText = SD.Color.FromArgb(95, 107, 115);   // ink-muted
-        public static readonly SD.Color DangerColor = SD.Color.FromArgb(179, 38, 30);   // danger
-        public static readonly SD.Color DangerHover = SD.Color.FromArgb(150, 32, 25);   // danger, hover
+        public static readonly SD.Color Text = SD.Color.FromArgb(0x14, 0x14, 0x1A);   // Homie text-primary
+        public static readonly SD.Color Text2 = SD.Color.FromArgb(0x53, 0x53, 0x5F);   // Homie text-secondary
+        public static readonly SD.Color Border = SD.Color.FromArgb(0xD9, 0xD9, 0xDE);   // Homie border-default
+        public static readonly SD.Color BorderStrong = SD.Color.FromArgb(0xC4, 0xC4, 0xCA);   // Homie border-input
+        public static readonly SD.Color Hover = SD.Color.FromArgb(0xEC, 0xEC, 0xEF);   // Homie surface-pill
+        public static readonly SD.Color Selected = SD.Color.FromArgb(0xE7, 0xE7, 0xF4);   // Homie primary-100
+        public static readonly SD.Color Brand = SD.Color.FromArgb(0x56, 0x56, 0x99);   // Homie action-primary
+        public static readonly SD.Color BrandHover = SD.Color.FromArgb(0x48, 0x48, 0x7F);   // primary-700
+        public static readonly SD.Color BrandPress = SD.Color.FromArgb(0x39, 0x39, 0x65);   // primary-800
+        public static readonly SD.Color BrandSoft = SD.Color.FromArgb(0xE7, 0xE7, 0xF4);   // primary-100
+        public static readonly SD.Color Card = SD.Color.FromArgb(0xF6, 0xF6, 0xF8);   // Homie surface-card (fill, no border, no shadow)
+        public static readonly SD.Color Disabled = SD.Color.FromArgb(0xEC, 0xEC, 0xEF);
+        public static readonly SD.Color DisabledText = SD.Color.FromArgb(0x81, 0x81, 0x8D);
+        public static readonly SD.Color DangerColor = SD.Color.FromArgb(0xDA, 0x00, 0x00);   // Homie text-danger
+        public static readonly SD.Color DangerHover = SD.Color.FromArgb(0x97, 0x00, 0x00);   // text-danger-strong
         // font (user, 22 Oct 2026): Segoe UI Variable (Windows 11, the native font closest to the design system's Inter), Segoe UI where
         // it is not installed (Windows 10). Windows code keeps writing "Segoe UI" / "Segoe UI Semibold": Apply maps them (MapFamily).
-        public static readonly string TextFamily = Installed("Segoe UI Variable Text") ? "Segoe UI Variable Text" : "Segoe UI";
-        public static readonly string SemiboldFamily = Installed("Segoe UI Variable Text Semibold") ? "Segoe UI Variable Text Semibold" : "Segoe UI Semibold";
+        public static readonly string TextFamily = Installed("Rethink Sans") ? "Rethink Sans" : "Segoe UI";   // Homie: Rethink Sans, Segoe UI fallback
+        public static readonly string SemiboldFamily = Installed("Rethink Sans Medium") ? "Rethink Sans Medium" : Installed("Rethink Sans") ? "Rethink Sans" : "Segoe UI Semibold";
         static bool Installed(string family)
         {
             try { using (var f = new SD.Font(family, 10f)) return f.Name == family; }   // a missing family comes back as Microsoft Sans Serif
@@ -68,12 +69,13 @@ namespace RevitMultiBridge
         public static readonly SD.Font Small = new SD.Font(TextFamily, 9.75f);
 
         // status tags = solid chips with white text (StatusChip); "Orange" shares the warning colour
-        public static readonly Pill Red = new Pill(SD.Color.FromArgb(179, 38, 30), SD.Color.White, SD.Color.FromArgb(179, 38, 30));
-        public static readonly Pill Green = new Pill(SD.Color.FromArgb(46, 125, 50), SD.Color.White, SD.Color.FromArgb(46, 125, 50));
-        public static readonly Pill Amber = new Pill(SD.Color.FromArgb(138, 90, 18), SD.Color.White, SD.Color.FromArgb(138, 90, 18));
-        public static readonly Pill Blue = new Pill(SD.Color.FromArgb(31, 95, 168), SD.Color.White, SD.Color.FromArgb(31, 95, 168));
-        public static readonly Pill Orange = new Pill(SD.Color.FromArgb(138, 90, 18), SD.Color.White, SD.Color.FromArgb(138, 90, 18));
-        public static readonly Pill Gray = new Pill(SD.Color.FromArgb(95, 107, 115), SD.Color.White, SD.Color.FromArgb(95, 107, 115));
+        // Homie chips: soft tint + dark text, fully rounded (never solid)
+        public static readonly Pill Red = new Pill(SD.Color.FromArgb(0xEA, 0xDC, 0xDC), SD.Color.FromArgb(0x97, 0x00, 0x00), SD.Color.FromArgb(0xEA, 0xDC, 0xDC));
+        public static readonly Pill Green = new Pill(SD.Color.FromArgb(0xE3, 0xEE, 0xDF), SD.Color.FromArgb(0x44, 0x70, 0x3B), SD.Color.FromArgb(0xE3, 0xEE, 0xDF));
+        public static readonly Pill Amber = new Pill(SD.Color.FromArgb(0xFA, 0xF2, 0xDC), SD.Color.FromArgb(0x85, 0x4D, 0x0E), SD.Color.FromArgb(0xFA, 0xF2, 0xDC));
+        public static readonly Pill Blue = new Pill(SD.Color.FromArgb(0xE7, 0xE7, 0xF4), SD.Color.FromArgb(0x48, 0x48, 0x7F), SD.Color.FromArgb(0xE7, 0xE7, 0xF4));
+        public static readonly Pill Orange = Amber;
+        public static readonly Pill Gray = new Pill(SD.Color.FromArgb(0xEC, 0xEC, 0xEF), SD.Color.FromArgb(0x53, 0x53, 0x5F), SD.Color.FromArgb(0xEC, 0xEC, 0xEF));
 
         public static Pill PillFor(string status)
         {
@@ -100,7 +102,7 @@ namespace RevitMultiBridge
                         if ((b.Anchor & WF.AnchorStyles.Right) != 0 && (b.Anchor & WF.AnchorStyles.Left) == 0) b.Left -= d;
                         b.Width = need;
                     }
-                    if ((b.Anchor & WF.AnchorStyles.Bottom) != 0 && (b.Anchor & WF.AnchorStyles.Top) == 0 && b.Height != 32) { b.Top -= 32 - b.Height; b.Height = 32; }
+                    if ((b.Anchor & WF.AnchorStyles.Bottom) != 0 && (b.Anchor & WF.AnchorStyles.Top) == 0 && b.Height != 38) { b.Top -= 38 - b.Height; b.Height = 38; }   // Homie: 44 px buttons after scaling
                 }
                 if (c.HasChildren) NormalizeButtons(c);
             }
@@ -187,9 +189,9 @@ namespace RevitMultiBridge
             foreach (var kv in anchors) kv.Key.Anchor = kv.Value;
             if (!min.IsEmpty) f.MinimumSize = new SD.Size(min.Width, min.Height + HeaderH);
             var head = new WF.Panel { Dock = WF.DockStyle.Top, Height = HeaderH, BackColor = Page };
-            var title = new WF.Label { Text = name, AutoSize = true, Location = new SD.Point(12, ctx == "" ? 12 : 5), ForeColor = Brand, Font = new SD.Font("Segoe UI Semibold", 13f) };
+            var title = new WF.Label { Text = name, AutoSize = true, Location = new SD.Point(12, ctx == "" ? 12 : 5), ForeColor = Text, Font = new SD.Font("Segoe UI", 12.75f, SD.FontStyle.Bold) };
             head.Controls.Add(title);
-            if (ctx != "") head.Controls.Add(new WF.Label { Text = ctx, AutoSize = true, Location = new SD.Point(13, 28), ForeColor = Text2, Font = new SD.Font("Segoe UI", 8.25f) });
+            if (ctx != "") head.Controls.Add(new WF.Label { Text = ctx, AutoSize = true, Location = new SD.Point(13, 29), ForeColor = Text2, Font = new SD.Font("Segoe UI", 8.25f) });
             f.Controls.Add(head); head.SendToBack();
             f.Text = "Claude \u00B7 " + name + (ctx == "" ? "" : " (" + ctx + ")");
         }
@@ -247,7 +249,7 @@ namespace RevitMultiBridge
                 }
             };
             cols(f);
-            RowHeight = (int)Math.Round(28 * k);
+            RowHeight = (int)Math.Round(36 * k);   // Homie rows: ~44 px
         }
         public static int RowHeight = 28;
 
@@ -332,18 +334,18 @@ namespace RevitMultiBridge
             if (!en) { fill = Disabled; border = Disabled; fore = DisabledText; }
             else if (st.Kind == BtnKind.Primary) { fill = st.Down ? BrandPress : st.Hover ? BrandHover : Brand; border = fill; fore = SD.Color.White; }
             else if (st.Kind == BtnKind.Danger) { fill = st.Down || st.Hover ? DangerHover : DangerColor; border = fill; fore = SD.Color.White; }
-            else if (st.Kind == BtnKind.Dropdown) { fill = st.Down ? Hover : Surface; border = st.Hover || st.Down ? DisabledText : BorderStrong; fore = Text; }
-            else { fill = st.Down || st.Hover ? Hover : Surface; border = BorderStrong; fore = Text; }
+            else if (st.Kind == BtnKind.Dropdown) { fill = Page; border = st.Hover || st.Down ? Brand : BorderStrong; fore = Text; }
+            else { fill = st.Down ? Border : st.Hover ? Hover : Card; border = fill; fore = Text; }   // Homie secondary: filled, no border
             g.Clear(ParentBack(b));
             var old = g.SmoothingMode; g.SmoothingMode = SD.Drawing2D.SmoothingMode.AntiAlias;
-            using (var path = RoundRect(new SD.RectangleF(0.5f, 0.5f, b.Width - 1f, b.Height - 1f), 6))
+            using (var path = RoundRect(new SD.RectangleF(0.5f, 0.5f, b.Width - 1f, b.Height - 1f), 12))
             {
                 using (var br = new SD.SolidBrush(fill)) g.FillPath(br, path);
                 using (var p = new SD.Pen(border, 1f)) g.DrawPath(p, path);
             }
             if (en && b.Focused)            // keyboard focus: soft primary ring inside the border
-                using (var path = RoundRect(new SD.RectangleF(3f, 3f, b.Width - 6f, b.Height - 6f), 4))
-                using (var p = new SD.Pen(st.Kind == BtnKind.Secondary ? Brand : SD.Color.FromArgb(160, 255, 255, 255), 1.5f)) g.DrawPath(p, path);
+                using (var path = RoundRect(new SD.RectangleF(2f, 2f, b.Width - 4f, b.Height - 4f), 10))
+                using (var p = new SD.Pen(st.Kind == BtnKind.Primary || st.Kind == BtnKind.Danger ? SD.Color.FromArgb(170, 255, 255, 255) : Brand, 1.5f)) g.DrawPath(p, path);
             if (st.Kind == BtnKind.Dropdown)
             {
                 // text on the left (without the "▾" of the caption) + chevron on the right
@@ -389,13 +391,13 @@ namespace RevitMultiBridge
             {
                 if (!lv.Visible) return;
                 var g = e.Graphics; var old = g.SmoothingMode; g.SmoothingMode = SD.Drawing2D.SmoothingMode.AntiAlias;
-                using (var gp = RoundRect(new SD.RectangleF(lv.Left - 2, lv.Top - 2, lv.Width + 3, lv.Height + 3), 6)) using (var p = new SD.Pen(Border)) g.DrawPath(p, gp);
+                using (var gp = RoundRect(new SD.RectangleF(lv.Left - 8, lv.Top - 6, lv.Width + 16, lv.Height + 12), 12)) using (var b = new SD.SolidBrush(Card)) g.FillPath(b, gp);   // Homie: grey card container, no border
                 g.SmoothingMode = old;
             };
         }
         public static void Table(WF.ListView lv)
         {
-            TableFrame(lv); lv.GridLines = false; lv.BackColor = Surface; lv.ForeColor = Text; lv.Font = Body; lv.FullRowSelect = true;
+            TableFrame(lv); lv.GridLines = false; lv.BackColor = Card; lv.ForeColor = Text; lv.Font = Body; lv.FullRowSelect = true;
             if (lv.SmallImageList == null) lv.SmallImageList = new WF.ImageList { ImageSize = new SD.Size(1, RowHeight) };   // row height
             Proportional(lv);
             CellTips(lv);
@@ -424,8 +426,7 @@ namespace RevitMultiBridge
         static void DrawHeader(WF.DrawListViewColumnHeaderEventArgs e)
         {
             {
-                using (var b = new SD.SolidBrush(Page)) e.Graphics.FillRectangle(b, e.Bounds);      // header = Grey-50 band
-                using (var p = new SD.Pen(Border)) e.Graphics.DrawLine(p, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+                using (var b = new SD.SolidBrush(Card)) e.Graphics.FillRectangle(b, e.Bounds);      // Homie: header on the container, no fill, no line
                 var r = new SD.Rectangle(e.Bounds.X + 8, e.Bounds.Y, e.Bounds.Width - 10, e.Bounds.Height);
                 WF.TextRenderer.DrawText(e.Graphics, e.Header.Text, Small, r, Text2, WF.TextFormatFlags.VerticalCenter | WF.TextFormatFlags.Left | WF.TextFormatFlags.EndEllipsis);
             }
@@ -438,9 +439,9 @@ namespace RevitMultiBridge
                 int last;
                 if (!rowCounts.TryGetValue(lv, out last) || last != lv.Items.Count) { rowCounts[lv] = lv.Items.Count; lv.BeginInvoke(new Action(() => FitColumns(lv))); }
                 var g = e.Graphics;
-                var bg = e.Item.Selected ? Selected : Surface;
-                using (var b = new SD.SolidBrush(bg)) g.FillRectangle(b, e.Bounds);
-                using (var p = new SD.Pen(Hover)) g.DrawLine(p, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+                var bg = e.Item.Selected ? Selected : Card;
+                using (var b = new SD.SolidBrush(bg)) g.FillRectangle(b, e.Bounds);   // Homie: rows never separated by lines
+                if (e.Item.Selected && e.ColumnIndex == 0) using (var b = new SD.SolidBrush(Brand)) g.FillRectangle(b, e.Bounds.X, e.Bounds.Y + 4, 4, e.Bounds.Height - 8);   // selected: 4 px primary bar
                 int pc;
                 string txt = e.SubItem.Text;
                 Func<WF.DrawListViewSubItemEventArgs, bool> custom;
@@ -496,7 +497,8 @@ namespace RevitMultiBridge
         {
             double[] w;
             if (sizing || !colWeights.TryGetValue(lv, out w) || w.Length != lv.Columns.Count) return;
-            int avail = lv.ClientSize.Width - 2 - (IsVScrollVisible(lv) ? 0 : WF.SystemInformation.VerticalScrollBarWidth);   // room for a scrollbar that may appear later
+            bool scroll = IsVScrollVisible(lv) || (lv.Items.Count + 1) * RowHeight > lv.Height;   // room for the scrollbar only when the rows do not fit (else a white gap)
+            int avail = lv.Width - 2 - (scroll ? WF.SystemInformation.VerticalScrollBarWidth : 0);
             if (avail < 120) return;
             double tot = w.Sum();
             // a header is never cut: minimum width = header text + padding; the rest is shared in proportion
@@ -532,6 +534,8 @@ namespace RevitMultiBridge
         static bool IsVScrollVisible(WF.Control c) { return c.IsHandleCreated && (GetWindowLong(c.Handle, -16) & 0x00200000) != 0; }
         // mark the column of a table that shows status pills
         public static void Pills(WF.ListView lv, int column) { pillColumn[lv] = column; lv.Invalidate(); }
+        // fit the columns again right after the rows change (the paint-time refit comes late; the scrollbar room depends on the row count)
+        public static void Refit(WF.ListView lv) { FitColumns(lv); }
 
         // per-table custom cell painter (after the row background is drawn); return true when the cell was handled
         public static readonly WeakMap<WF.ListView, Func<WF.DrawListViewSubItemEventArgs, bool>> CellPainter =
@@ -610,7 +614,7 @@ namespace RevitMultiBridge
             int h = 22, w = Math.Min(cell.Width - 2, sz.Width + 20);
             var r = new SD.Rectangle(cell.X, cell.Y + (cell.Height - h) / 2, w, h);
             var old = g.SmoothingMode; g.SmoothingMode = SD.Drawing2D.SmoothingMode.AntiAlias;
-            using (var path = RoundRect(new SD.RectangleF(r.X + 0.5f, r.Y + 0.5f, r.Width - 1, r.Height - 1), 4))   // solid chip, radius-sm
+            using (var path = RoundRect(new SD.RectangleF(r.X + 0.5f, r.Y + 0.5f, r.Width - 1, r.Height - 1), h / 2f))   // Homie chip: soft tint, fully rounded
             {
                 using (var b = new SD.SolidBrush(p.Back)) g.FillPath(b, path);
                 using (var pen = new SD.Pen(p.Border)) g.DrawPath(pen, path);
