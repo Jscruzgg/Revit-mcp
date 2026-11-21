@@ -69,10 +69,14 @@ namespace RevitMultiBridge
         {
             try
             {
-                const string tab = "MCP";
-                try { app.CreateRibbonTab(tab); } catch { }   // already there (another add-in of this tab)
-                var panel = app.CreateRibbonPanel(tab, "Claude");
-                var pbd = new PushButtonData("RevitMultiBridge_Window", "Multi\nBridge", typeof(BridgeApp).Assembly.Location, "RevitMultiBridge.ShowWindowCommand");
+                // own tab: the older RevitMCP add-in already has tab "MCP" with a panel "Claude" (same panel name = Revit refuses it,
+                // and the button did not appear, 21 Nov 2026). A taken panel name falls back to a unique one.
+                const string tab = "Claude Bridge";
+                try { app.CreateRibbonTab(tab); } catch { }   // already there
+                RibbonPanel panel;
+                try { panel = app.CreateRibbonPanel(tab, "MCP"); }
+                catch (Autodesk.Revit.Exceptions.ArgumentException) { panel = app.CreateRibbonPanel(tab, "MCP Multi Bridge"); }
+                var pbd = new PushButtonData("RevitMultiBridge_Window", "MCP\nBridge", typeof(BridgeApp).Assembly.Location, "RevitMultiBridge.ShowWindowCommand");
                 pbd.ToolTip = "Revit Multi Bridge: status of this Revit (port, RUNNING / STOPPED), every Revit bridge on this PC, recent calls, Start / Stop, Re-claim, Cancel.";
                 pbd.LargeImage = Icon(32); pbd.Image = Icon(16);
                 panel.AddItem(pbd);
