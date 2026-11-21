@@ -1,0 +1,10 @@
+# build output and local tooling
+bin/
+obj/
+out/
+*.dll
+*.exe
+*.pdb
+.claude/
+# local instructions for Claude (never pushed)
+CLAUDE.md
