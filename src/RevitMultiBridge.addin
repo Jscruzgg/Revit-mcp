@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Revit Multi Bridge</Name>
+    <Assembly>RevitMultiBridge\RevitMultiBridge.dll</Assembly>
+    <FullClassName>RevitMultiBridge.BridgeApp</FullClassName>
+    <ClientId>851a1fa9-9ae0-402e-8c2e-54b995db5ab1</ClientId>
+    <VendorId>CLAUDE</VendorId>
+    <VendorDescription>Revit Multi Bridge (MCP server for Claude, one port per Revit window)</VendorDescription>
+  </AddIn>
+</RevitAddIns>
