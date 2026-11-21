@@ -8,3 +8,4 @@ out/
 .claude/
 # local instructions for Claude (never pushed)
 CLAUDE.md
+tests/out/
