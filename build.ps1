@@ -53,7 +53,11 @@ if ($LASTEXITCODE -ne 0) { $log | Write-Host; Write-Host "Gateway : FAILED" -For
 else { Write-Host "Gateway : OK  $gwExe" -ForegroundColor Green }
 
 if ($Register -and -not $TestOut -and $LASTEXITCODE -eq 0) {
-    & claude mcp remove -s user revit-multi 2>$null | Out-Null
+    # an earlier registration is replaced; "not found" is not an error (PowerShell 5.1 turned its stderr into a stop, 21 Nov 2026)
+    $ErrorActionPreference = "Continue"
+    cmd /c "claude mcp remove -s user revit-multi >nul 2>&1"
     & claude mcp add -s user revit-multi -- "$gwExe"
+    if ($LASTEXITCODE -eq 0) { Write-Host "Claude Code: MCP 'revit-multi' registered (new sessions)" -ForegroundColor Green }
+    else { Write-Host "Claude Code: registration FAILED" -ForegroundColor Red; $failed++ }
 }
 if ($failed -gt 0) { exit 1 }
